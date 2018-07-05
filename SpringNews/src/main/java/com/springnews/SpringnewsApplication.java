@@ -1,12 +1,13 @@
-package com.superxhp.newsdeploy;
+package com.springnews;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.springnews.entity.UserDao;
 
 @SpringBootApplication
-public class NewsDeployApplication {
+public class SpringnewsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(NewsDeployApplication.class, args);
+		SpringApplication.run(SpringnewsApplication.class, args);
 	}
 }
