@@ -10,18 +10,18 @@ public class UserDao extends JdbcDaoSupport {
     @Autowired
     UserRepository userRepository;
 
-    public List<User> userList(){
+    public List<MyUser> userList(){
         return userRepository.findAll();
     }
 
-    public List<User> QueryAllUser() {
+    public List<MyUser> QueryAllUser() {
 
         String sql = "select uid,author,username from user";
         List<Map<String,Object>> list = getJdbcTemplate().queryForList(sql);
-        List<User> userList=new ArrayList<User>();
+        List<MyUser> userList=new ArrayList<MyUser>();
         for(Map<String,Object> row:list)
         {
-            User user=new User();
+            MyUser user=new MyUser();
             user.setUid((Integer)row.get("uid"));
             user.setAuthor((String)row.get("author"));
             user.setUsername((String)row.get("username"));
