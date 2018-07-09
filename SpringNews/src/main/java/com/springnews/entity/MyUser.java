@@ -9,7 +9,7 @@ import java.util.Date;
 public class MyUser {
     @Id
     @GeneratedValue
-    private int uid;
+    private int id;
 
     private String author;
     private String username;
@@ -19,12 +19,12 @@ public class MyUser {
     private Date created_time;
     private Date updated_time;
 
-    public int getUid() {
-        return uid;
+    public int getId() {
+        return id;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getAuthor() {

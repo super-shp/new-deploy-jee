@@ -21,6 +21,11 @@ public class UserController {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    @RequestMapping("/hello")
+    public String hello(){
+        return "hello";
+    }
+
     @PostMapping("/signup")
     public void signUp(@RequestBody MyUser user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

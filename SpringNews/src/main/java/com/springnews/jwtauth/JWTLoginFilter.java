@@ -55,7 +55,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication auth) throws IOException, ServletException {
 
         String token = Jwts.builder()
-                .setSubject(((MyUser) auth.getPrincipal()).getUsername())
+                .setSubject(((User) auth.getPrincipal()).getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
                 .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
                 .compact();
