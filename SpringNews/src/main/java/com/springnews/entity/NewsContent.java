@@ -1,8 +1,11 @@
 package com.springnews.entity;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.persistence.Id;
 import java.util.Date;
 
+@Document
 public class NewsContent {
     @Id
     private String id;
