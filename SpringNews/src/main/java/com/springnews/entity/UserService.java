@@ -20,6 +20,10 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public MyUser findByUid(String uid){
+        return userRepository.findByUid(uid);
+    }
+
     @Transactional
     public boolean addUser(MyUser user){
         if(findByUsername(user.getUsername())==null){

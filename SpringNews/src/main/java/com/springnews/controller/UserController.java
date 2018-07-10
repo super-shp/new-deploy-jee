@@ -1,7 +1,7 @@
 package com.springnews.controller;
 
 import com.springnews.entity.MyUser;
-import com.springnews.repository.MyUserRepository;
+import com.springnews.entity.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-    private MyUserRepository applicationUserRepository;
+    private UserRepository applicationUserRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserController(MyUserRepository myUserRepository,
+    public UserController(UserRepository myUserRepository,
                           BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.applicationUserRepository = myUserRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
