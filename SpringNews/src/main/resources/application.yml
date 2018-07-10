@@ -1,3 +1,3 @@
 spring:
   profiles:
-    active: chz
+    active: yungcho
