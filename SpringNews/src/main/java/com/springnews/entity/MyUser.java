@@ -10,7 +10,7 @@ public class MyUser {
     @Id
     @GeneratedValue
     private int id;
-
+    private String uid;
     private String author;
     private String username;
     private String password;
@@ -18,6 +18,14 @@ public class MyUser {
     private int status;
     private Date created_time;
     private Date updated_time;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public int getId() {
         return id;

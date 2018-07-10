@@ -1,8 +1,11 @@
 package com.springnews.controller;
 
 import com.springnews.entity.*;
+import com.springnews.utils.ResultUtil;
+import com.springnews.utils.UnifyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -47,8 +50,14 @@ public class StartController {
     }
 
     @GetMapping(value = "/users")
-    public List<MyUser> queryUser(){
-        return userRepository.findAll();
+    public UnifyResponse<MyUser> queryUsers(){
+
+        return ResultUtil.successs(userRepository.findAll());
+    }
+
+    @GetMapping(value = "/user/{id}")
+    public UnifyResponse<MyUser> queryUser(@PathVariable("id") String uid){
+        return ResultUtil.successs(userService.findByUid(uid));
     }
 
 }
