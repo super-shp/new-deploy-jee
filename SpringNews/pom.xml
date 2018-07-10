@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.springnews</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>SpringnewsApplication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -81,9 +81,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.springnews.SpringnewsApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
-
 </project>
