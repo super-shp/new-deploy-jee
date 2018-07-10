@@ -27,4 +27,4 @@
 ### application.properties ###
 
 # if you need, make a new one your own
-application.yml
+src/main/resources/application.yml
