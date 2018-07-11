@@ -2,22 +2,33 @@ package com.springnews.entity;
 
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class UserInfo {
     @Id
-    private int uid;
+    @GeneratedValue
+    private int id;
 
+    private String uid;
     private String figure;
     private int liked;
     private int words;
 
-    public int getUid() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 
