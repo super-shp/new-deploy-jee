@@ -12,15 +12,42 @@ public class News {
     private int pid;
 
     private int uid;
+    private String figure;
     private String cover;
     private String title;
     private String author;
     private String intro;
     private int visited;
+    private int cid;
     private String column;
     private Date created_time;
     private Date updated_time;
+    private int like;
     private int status;
+
+    public int getCid() {
+        return cid;
+    }
+
+    public void setCid(int cid) {
+        this.cid = cid;
+    }
+
+    public String getFigure() {
+        return figure;
+    }
+
+    public void setFigure(String figure) {
+        this.figure = figure;
+    }
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
 
     public int getStatus() {
         return status;
