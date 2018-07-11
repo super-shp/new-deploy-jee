@@ -12,7 +12,7 @@ public class NewsContent {
 
     private int pid;
     private String title;
-    private int uid;
+    private String uid;
     private int words;
     private String author;
     private Date created_time;
@@ -47,11 +47,11 @@ public class NewsContent {
         this.pid = pid;
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 

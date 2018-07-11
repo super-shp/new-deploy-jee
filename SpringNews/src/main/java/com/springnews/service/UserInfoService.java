@@ -1,4 +1,4 @@
-package com.springnews.entity;
+package com.springnews.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

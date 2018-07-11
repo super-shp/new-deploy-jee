@@ -1,5 +1,7 @@
-package com.springnews.entity;
+package com.springnews.service;
 
+import com.springnews.entity.MyUser;
+import com.springnews.entity.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,7 @@
 package com.springnews.controller;
 
 import com.springnews.entity.*;
+import com.springnews.service.UserService;
 import com.springnews.utils.ResultUtil;
 import com.springnews.utils.UnifyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
-import java.util.List;
 
 @RestController
 public class StartController {
