@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/springnews
     username: root
-    password: buzhidao96923
+    password: root
   data:
     mongodb:
       uri: mongodb://localhost:27017/springnews

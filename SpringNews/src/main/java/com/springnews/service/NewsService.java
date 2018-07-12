@@ -1,7 +1,10 @@
-package com.springnews.entity;
+package com.springnews.service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.springnews.entity.News;
+import com.springnews.entity.NewsRepository;
+import com.springnews.entity.TimeFormatTransform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +68,7 @@ public class NewsService {
 
     @Transactional
     public void deleteByPid(int pid){
-        newsRepository.deleteById(pid);
+        newsRepository.deleteByPid(pid);
     }
 
 
