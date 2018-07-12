@@ -9,5 +9,9 @@ spring:
       uri: mongodb://localhost:27017/springnews
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
