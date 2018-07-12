@@ -26,31 +26,35 @@ public class NewsService {
         }
         TimeFormatTransform timeFormatTransform = new TimeFormatTransform();
 
-        JsonObject obj = new JsonObject();
+
+        JsonObject newsJson = new JsonObject();
         //addProperty是添加属性（数值、数组等）；add是添加json对象
-        obj.addProperty("total", newsList.size());
-        obj.addProperty("offset", 1);
+        newsJson.addProperty("total", newsList.size());
+        newsJson.addProperty("offset", (currentPage-1)*pageSize);
 
-        JsonArray array = new JsonArray();
-
+        JsonArray newsArray = new JsonArray();
+        //System.out.println(newsJson);
         for(int i = (currentPage-1)*pageSize; i < currentPage*pageSize; i++){
-            JsonObject lan1 = new JsonObject();
-            lan1.addProperty("pid", newsList.get(i).getPid());
-            lan1.addProperty("uid", newsList.get(i).getUid());
-            lan1.addProperty("figure", newsList.get(i).getFigure());
-            lan1.addProperty("like", newsList.get(i).getLiked());
-            lan1.addProperty("cover", newsList.get(i).getCover());
-            lan1.addProperty("title", newsList.get(i).getTitle());
-            lan1.addProperty("author", newsList.get(i).getAuthor());
-            lan1.addProperty("intro", newsList.get(i).getIntro());
-            lan1.addProperty("region_name", newsList.get(i).getRegion());
-            lan1.addProperty("visited", newsList.get(i).getVisited());
-            lan1.addProperty("cid", newsList.get(i).getCid());
-            lan1.addProperty("updated_time", timeFormatTransform.dateToTimeStamp(newsList.get(i).getUpdated_time()));
-            array.add(lan1);
+            if(i == newsList.size()){
+                break;
+            }
+            JsonObject news = new JsonObject();
+            news.addProperty("pid", newsList.get(i).getPid());
+            news.addProperty("uid", newsList.get(i).getUid());
+            news.addProperty("figure", newsList.get(i).getFigure());
+            news.addProperty("liked", newsList.get(i).getLiked());
+            news.addProperty("cover", newsList.get(i).getCover());
+            news.addProperty("title", newsList.get(i).getTitle());
+            news.addProperty("author", newsList.get(i).getAuthor());
+            news.addProperty("intro", newsList.get(i).getIntro());
+            news.addProperty("region_name", newsList.get(i).getRegion());
+            news.addProperty("visited", newsList.get(i).getVisited());
+            news.addProperty("cid", newsList.get(i).getCid());
+            news.addProperty("updated_time", timeFormatTransform.dateToTimeStamp(newsList.get(i).getUpdated_time()));
+            newsArray.add(news);
         }
-        obj.add("articleList", array);
-        return obj;
+        newsJson.add("articleList", newsArray);
+        return newsJson;
     }
 
     @Transactional
@@ -61,6 +65,19 @@ public class NewsService {
         }
         else{
             temp.setStatus(2);
+            newsRepository.save(temp);
+            return true;
+        }
+    }
+
+    @Transactional
+    public boolean callBackByPid(int pid){
+        News temp = newsRepository.findByPid(pid);
+        if(temp == null){
+            return false;
+        }
+        else{
+            temp.setStatus(0);
             newsRepository.save(temp);
             return true;
         }

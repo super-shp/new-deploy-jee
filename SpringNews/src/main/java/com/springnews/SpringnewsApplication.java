@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.List;
+
 @SpringBootApplication
 public class SpringnewsApplication {
 
@@ -12,7 +14,6 @@ public class SpringnewsApplication {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(SpringnewsApplication.class, args);
 	}

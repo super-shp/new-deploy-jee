@@ -5,12 +5,14 @@ import com.springnews.qiniu.QiniuUpload;
 import com.springnews.service.UserService;
 import com.springnews.utils.ResultUtil;
 import com.springnews.utils.UnifyResponse;
+import org.hibernate.validator.constraints.EAN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 public class StartController {
@@ -27,7 +29,7 @@ public class StartController {
     private TimeFormatTransform timeFormatTransform;
 
     @GetMapping(value = "/start")
-    public String test(){
+    public List<MyUser> test(){
 //        timeFormatTransform = new TimeFormatTransform();
 //        timeFormatTransform.dateToTimeStamp(userRepository.findAll().get(0).getCreated_time());
 //        NewsContent n = new NewsContent();
@@ -46,12 +48,12 @@ public class StartController {
 //        userService.deleteUserByUsername("123");
 //        return user;
 
-        //return userRepository.findAll();
+        return userRepository.findAll();
         //return newsContentRepository.findAll();
 //        System.out.println("!@#$%^");
 //        QiniuUpload q = new QiniuUpload();
 //        q.fileUpLoad("C:\\Users\\aw\\Desktop\\buzhidao.jpg", "buzhidao.jpg");
-        return "HelloWorld";
+//        return "HelloWorld";
     }
 
     @GetMapping(value = "/users")
