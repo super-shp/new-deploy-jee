@@ -10,9 +10,8 @@ public class News {
     @Id
     @GeneratedValue
     private int pid;
-
-    private int uid;
     private String figure;
+    private String uid;
     private String cover;
     private String title;
     private String author;
@@ -65,11 +64,11 @@ public class News {
         this.pid = pid;
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 

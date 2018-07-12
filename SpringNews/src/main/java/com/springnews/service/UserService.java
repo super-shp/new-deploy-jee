@@ -1,5 +1,7 @@
-package com.springnews.entity;
+package com.springnews.service;
 
+import com.springnews.entity.MyUser;
+import com.springnews.entity.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,10 @@ public class UserService {
 
     public MyUser findByUsername(String username){
         return userRepository.findByUsername(username);
+    }
+
+    public MyUser findByUid(String uid){
+        return userRepository.findByUid(uid);
     }
 
     @Transactional

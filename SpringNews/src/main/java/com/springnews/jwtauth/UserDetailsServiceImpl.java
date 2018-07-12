@@ -1,7 +1,7 @@
 package com.springnews.jwtauth;
 
 import com.springnews.entity.MyUser;
-import com.springnews.repository.MyUserRepository;
+import com.springnews.entity.UserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,9 +12,9 @@ import static java.util.Collections.emptyList;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private MyUserRepository applicationUserRepository;
+    private UserRepository applicationUserRepository;
 
-    public UserDetailsServiceImpl(MyUserRepository applicationUserRepository) {
+    public UserDetailsServiceImpl(UserRepository applicationUserRepository) {
         this.applicationUserRepository = applicationUserRepository;
     }
 
