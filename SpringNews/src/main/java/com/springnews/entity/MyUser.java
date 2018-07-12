@@ -10,6 +10,7 @@ public class MyUser {
     @Id
     @GeneratedValue
     private int id;
+
     private String uid;
     private String author;
     private String username;

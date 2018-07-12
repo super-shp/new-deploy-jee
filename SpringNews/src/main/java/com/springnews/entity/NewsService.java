@@ -35,12 +35,12 @@ public class NewsService {
             lan1.addProperty("pid", newsList.get(i).getPid());
             lan1.addProperty("uid", newsList.get(i).getUid());
             lan1.addProperty("figure", newsList.get(i).getFigure());
-            lan1.addProperty("like", newsList.get(i).getLike());
+            lan1.addProperty("like", newsList.get(i).getLiked());
             lan1.addProperty("cover", newsList.get(i).getCover());
             lan1.addProperty("title", newsList.get(i).getTitle());
             lan1.addProperty("author", newsList.get(i).getAuthor());
             lan1.addProperty("intro", newsList.get(i).getIntro());
-            lan1.addProperty("column_name", newsList.get(i).getColumn());
+            lan1.addProperty("region_name", newsList.get(i).getRegion());
             lan1.addProperty("visited", newsList.get(i).getVisited());
             lan1.addProperty("cid", newsList.get(i).getCid());
             lan1.addProperty("updated_time", timeFormatTransform.dateToTimeStamp(newsList.get(i).getUpdated_time()));

@@ -9,6 +9,8 @@ import java.util.Date;
 public class News {
     @Id
     @GeneratedValue
+    private int id;
+
     private int pid;
     private String figure;
     private String uid;
@@ -18,10 +20,10 @@ public class News {
     private String intro;
     private int visited;
     private int cid;
-    private String column;
+    private String region;
     private Date created_time;
     private Date updated_time;
-    private int like;
+    private int liked;
     private int status;
 
     public int getCid() {
@@ -40,12 +42,12 @@ public class News {
         this.figure = figure;
     }
 
-    public int getLike() {
-        return like;
+    public int getLiked() {
+        return liked;
     }
 
-    public void setLike(int like) {
-        this.like = like;
+    public void setLiked(int liked) {
+        this.liked = liked;
     }
 
     public int getStatus() {
@@ -112,12 +114,12 @@ public class News {
         this.visited = visited;
     }
 
-    public String getColumn() {
-        return column;
+    public String getRegion() {
+        return region;
     }
 
-    public void setColumn(String column) {
-        this.column = column;
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public Date getCreated_time() {

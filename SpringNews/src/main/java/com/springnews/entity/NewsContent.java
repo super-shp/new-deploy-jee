@@ -2,12 +2,14 @@ package com.springnews.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
 
 @Document
 public class NewsContent {
     @Id
+    @GeneratedValue
     private Integer id;
 
     private int pid;
@@ -18,9 +20,9 @@ public class NewsContent {
     private Date created_time;
     private Date updated_time;
     private int status;
-    private String column;
+    private String region;
     private int visited;
-    private int like;
+    private int liked;
     private String cover;
 
     public String getTitle() {
@@ -95,12 +97,12 @@ public class NewsContent {
         this.status = status;
     }
 
-    public String getColumn() {
-        return column;
+    public String getRegion() {
+        return region;
     }
 
-    public void setColumn(String column) {
-        this.column = column;
+    public void setRegion(String column) {
+        this.region = region;
     }
 
     public int getVisited() {
@@ -111,12 +113,12 @@ public class NewsContent {
         this.visited = visited;
     }
 
-    public int getLike() {
-        return like;
+    public int getLiked() {
+        return liked;
     }
 
-    public void setLike(int like) {
-        this.like = like;
+    public void setLiked(int liked) {
+        this.liked = liked;
     }
 
     public String getCover() {
