@@ -20,14 +20,19 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    @PostMapping(path = "/article-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/article-list")
     public String getNewsList(@RequestParam("currentPage") int currentPage, @RequestParam("pageSize") int pageSize, @RequestParam("filter") String filter){
-        newsService.setTopByPid(2);
         JsonObject newsJson = new JsonObject();
         //addProperty是添加属性（数值、数组等）；add是添加json对象
         newsJson.addProperty("errorCode", 200);
         newsJson.addProperty("msg", "OK");
-        newsJson.add("data", newsService.getNewsList(currentPage, pageSize, filter));
+        JsonObject newsList = newsService.getNewsList(currentPage, pageSize, filter);
+        if(newsList!=null){
+            newsJson.add("data", newsList);
+        }
+        else{
+            newsJson.addProperty("data", "null");
+        }
         Gson gson = new Gson();
         return gson.toJson(newsJson);
     }
