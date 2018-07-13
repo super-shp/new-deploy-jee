@@ -31,4 +31,19 @@ public class NewsController {
         Gson gson = new Gson();
         return gson.toJson(newsJson);
     }
+
+    @PostMapping(path = "/option")
+    public void NewsOperate(@RequestParam("pid") int pid, @RequestParam("op") String op){
+        switch (op){
+            case "set-top":
+                newsService.setTopByPid(pid);
+                break;
+            case "callback":
+                newsService.callBackByPid(pid);
+                break;
+            case "delete":
+                newsService.deleteByPid(pid);
+                break;
+        }
+    }
 }
