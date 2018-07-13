@@ -2,13 +2,9 @@ package com.springnews.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.springnews.entity.News;
-import com.springnews.entity.NewsRepository;
 import com.springnews.service.NewsService;
+import com.springnews.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,35 +16,55 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
+    @Autowired
+    private RegionService regionService;
+
+    private ResponseJson responseJson = new ResponseJson();
+
     @PostMapping(path = "/article-list")
     public String getNewsList(@RequestParam("currentPage") int currentPage, @RequestParam("pageSize") int pageSize, @RequestParam("filter") String filter){
-        JsonObject newsJson = new JsonObject();
-        //addProperty是添加属性（数值、数组等）；add是添加json对象
-        newsJson.addProperty("errorCode", 200);
-        newsJson.addProperty("msg", "OK");
         JsonObject newsList = newsService.getNewsList(currentPage, pageSize, filter);
         if(newsList!=null){
-            newsJson.add("data", newsList);
+            return responseJson.responseJson(200, "OK", newsList);
         }
         else{
-            newsJson.addProperty("data", "null");
+            return responseJson.responseJson(200, "OK", null);
         }
-        Gson gson = new Gson();
-        return gson.toJson(newsJson);
     }
 
     @PostMapping(path = "/option")
-    public void NewsOperate(@RequestParam("pid") int pid, @RequestParam("op") String op){
+    public String NewsOperate(@RequestParam("pid") int pid, @RequestParam("op") String op){
         switch (op){
             case "set-top":
-                newsService.setTopByPid(pid);
-                break;
+                if(newsService.setTopByPid(pid)){
+                    return responseJson.responseJson(200, "OK", null);
+                }
+                else {
+                    return responseJson.responseJson(100, "OK", null);
+                }
             case "callback":
-                newsService.callBackByPid(pid);
-                break;
+                if(newsService.callBackByPid(pid)){
+                    return responseJson.responseJson(200, "OK", null);
+                }
+                else {
+                    return responseJson.responseJson(100, "OK", null);
+                }
             case "delete":
                 newsService.deleteByPid(pid);
-                break;
+                return responseJson.responseJson(200, "OK", null);
+            default:
+                return responseJson.responseJson(100, "OK", null);
+        }
+    }
+
+    @PostMapping(path = "/get-column")
+    public String getColumnList(){
+        JsonObject regionList = regionService.getRegionList();
+        if(regionList!=null){
+            return responseJson.responseJson(200, "OK", regionList);
+        }
+        else{
+            return responseJson.responseJson(200, "OK", null);
         }
     }
 }
