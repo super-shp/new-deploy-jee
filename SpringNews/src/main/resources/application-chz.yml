@@ -7,9 +7,11 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/springnews
+      username: root
+      password: 123
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     show-sql: true
     properties:
