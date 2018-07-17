@@ -96,10 +96,12 @@ public class NewsController {
 
         System.out.println(requestBody.getClass());
 
-
         JSONObject jsonObject = JSONObject.fromObject(requestBody);
         int uid = jsonObject.getInt("uid");
-        System.out.println(uid);
+        JSONObject contents = jsonObject.getJSONObject("content");
+        JSONArray arr = contents.getJSONArray("arr");
+        System.out.println(arr);
+
 
         if (true){
             return responseJson.responseJson(ResponseCode.SUCCESS,null);
