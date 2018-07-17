@@ -1,7 +1,9 @@
 package com.springnews.controller;
 
-import com.google.gson.Gson;
+
 import com.google.gson.JsonObject;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 import com.springnews.entity.NewsEntity;
@@ -11,9 +13,7 @@ import com.springnews.service.RegionService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -80,7 +80,7 @@ public class NewsController {
     }
 
     @PostMapping(path = "/test-mongodb")
-    public String testDB(HttpServletRequest request) {
+    public String testDB(@RequestHeader("Authorization") String token, @RequestBody String requestBody) {
         System.out.println("test");
         int pid = 2;
         String content = "{}";
@@ -90,9 +90,15 @@ public class NewsController {
         news.setContent(bson);
         newsEntityService.saveNewsEntity(news);
 
-        String token = request.getHeader("Authorization");
         String username = getUserName(token);
         System.out.println(username);
+
+        System.out.println(requestBody.getClass());
+
+
+        JSONObject jsonObject = JSONObject.fromObject(requestBody);
+        int uid = jsonObject.getInt("uid");
+        System.out.println(uid);
 
         return null;
     }

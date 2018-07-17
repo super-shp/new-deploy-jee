@@ -4,7 +4,7 @@ public class ResultUtil {
 
     public static UnifyResponse successs(Object object){
         UnifyResponse response = new UnifyResponse();
-        response.setCode(0);
+        response.setCode(200);
         response.setMsg("OK");
         response.setData(object);
         return response;
