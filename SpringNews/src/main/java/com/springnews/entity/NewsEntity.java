@@ -4,6 +4,7 @@ import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.util.JSON;
+import net.sf.json.JSONObject;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
