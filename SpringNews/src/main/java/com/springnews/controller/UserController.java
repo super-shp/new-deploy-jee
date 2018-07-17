@@ -2,6 +2,7 @@ package com.springnews.controller;
 
 import com.springnews.entity.MyUser;
 import com.springnews.entity.UserRepository;
+import com.springnews.enums.ResultEnum;
 import com.springnews.utils.ResultUtil;
 import com.springnews.utils.UnifyResponse;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,8 +29,9 @@ public class UserController {
     @PostMapping("/signup")
     public UnifyResponse<MyUser> signUp(@RequestBody MyUser user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        System.out.println(user.getUsername());
         applicationUserRepository.save(user);
-        return ResultUtil.successs(user);
+        return ResultUtil.successs(ResultEnum.OK, user);
     }
 
     @PostMapping("/resetpassword")

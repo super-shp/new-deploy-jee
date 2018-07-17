@@ -24,6 +24,15 @@ public class NewsContent {
     private int visited;
     private int liked;
     private String cover;
+    private String content;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getTitle() {
         return title;

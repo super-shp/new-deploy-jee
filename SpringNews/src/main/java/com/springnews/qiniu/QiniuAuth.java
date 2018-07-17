@@ -10,9 +10,12 @@ public class QiniuAuth {
     private String path;
 
     public QiniuAuth(){
-        accessKey = "此处输入七牛云的访问密钥";
-        secretKey = "此处输入七牛云的访问密钥";
-        bucket = "此处输入你的bucket的名字";
+        accessKey = "RndofQdmMjHPa-1PbGQhMhYIX50U2OvE24rN_3Iv";
+        secretKey = "XlpkPXtk90wDD_CuTqL4wk3rkez7KC7zjFN39tsO";
+        bucket = "buzhidao";
+//        accessKey = "此处输入七牛云的访问密钥";
+//        secretKey = "此处输入七牛云的访问密钥";
+//        bucket = "此处输入你的bucket的名字";
         auth = Auth.create(accessKey, secretKey);
         path = "pboyzskrt.bkt.clouddn.com";
     }
