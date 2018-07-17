@@ -2,6 +2,7 @@ package com.springnews.controller;
 
 
 import com.google.gson.JsonObject;
+import com.springnews.utils.ResponseCode;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import com.mongodb.DBObject;
@@ -100,7 +101,15 @@ public class NewsController {
         int uid = jsonObject.getInt("uid");
         System.out.println(uid);
 
-        return null;
+        if (true){
+            return responseJson.responseJson(ResponseCode.SUCCESS,null);
+        }else if(false){
+            return responseJson.responseJson(ResponseCode.UNKNOW_ERROR, null);
+        }else {
+            // 或者可以自由定义返回值，但通常不建议这么做
+            return responseJson.responseJson(100, "OK", null);
+        }
+
     }
 
     private String getUserName(String token){
