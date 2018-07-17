@@ -2,9 +2,13 @@ package com.springnews.service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 import com.springnews.entity.*;
 import com.springnews.enums.ResultEnum;
 import com.springnews.exception.NewsException;
+import com.springnews.exception.UserException;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +21,9 @@ public class NewsService {
     private NewsRepository newsRepository;
 
     @Autowired
+    private NewsEntityService newsEntityService;
+
+    @Autowired
     private NewsContentService newsContentService;
 
     @Autowired
@@ -24,13 +31,11 @@ public class NewsService {
 
     public NewsList getNewsList(int currentPage, int pageSize, String filter) throws NewsException{
         if(currentPage <= 0 || pageSize <= 0){
-            System.out.println("异常之前");
-            throw new NewsException(ResultEnum.OPTION_FAILED);
-            //System.out.println("异常之后");
+            throw new NewsException(ResultEnum.PARAM_ERROR);
         }
         List<News> allNews = newsRepository.findAll();
         if (allNews.size() <= (currentPage-1)*pageSize){
-            throw new NewsException(ResultEnum.OPTION_FAILED);
+            throw new NewsException(ResultEnum.QUERY_ERROR);
         }
         NewsList newsList = new NewsList();
         newsList.setTotal(allNews.size());
@@ -46,12 +51,17 @@ public class NewsService {
     }
 
     @Transactional
-    public int publishNews(String title, int cid, String uid, String cover, String content){
+    public int publishNews(String title, int cid, String username, String cover, String content) throws Exception{
+        MyUser user = userService.findByUsername(username);
+        if(user.getRoot() != 0){
+            throw new UserException(ResultEnum.USER_AUTH_ERROR);
+        }
         News news = new News();
-        news.setTitle(title);news.setCid(cid);news.setUid(uid);news.setCover(cover);
-        news.setStatus(1);news.setVisited(0);news.setLiked(0);news.setIntro(content.substring(0,100));
-        news.setPid(news.getId());
-        newsRepository.save(news);
+        news.setTitle(title);news.setCid(cid);news.setCover(cover);
+        news.setUid(user.getUid());news.setAuthor(user.getAuthor());
+        news.setStatus(1);news.setVisited(0);news.setLiked(0);
+        News temp = newsRepository.save(news);
+        newsContentService.publishNews(temp.getPid(), content);
         return news.getPid();
     }
 
@@ -83,7 +93,7 @@ public class NewsService {
     public boolean setTopByPid(int pid) throws NewsException{
         News temp = newsRepository.findByPid(pid);
         if(temp == null){
-            throw new NewsException(ResultEnum.OPTION_FAILED);
+            throw new NewsException(ResultEnum.QUERY_ERROR);
             //return false;
         }
         else{
@@ -97,7 +107,7 @@ public class NewsService {
     public boolean callBackByPid(int pid) throws NewsException{
         News temp = newsRepository.findByPid(pid);
         if(temp == null){
-            throw new NewsException(ResultEnum.OPTION_FAILED);
+            throw new NewsException(ResultEnum.QUERY_ERROR);
             //return false;
         }
         else{
@@ -126,7 +136,7 @@ public class NewsService {
                 deleteByPid(pid);
                 return true;
             default:
-                throw new NewsException(ResultEnum.OPTION_FAILED);
+                throw new NewsException(ResultEnum.PARAM_ERROR);
         }
     }
 

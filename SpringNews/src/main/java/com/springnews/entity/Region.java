@@ -8,10 +8,8 @@ import javax.persistence.Id;
 public class Region {
     @Id
     @GeneratedValue
-    private int id;
-
-
     private int cid;
+
     private String region_name;
 
     public int getCid() {

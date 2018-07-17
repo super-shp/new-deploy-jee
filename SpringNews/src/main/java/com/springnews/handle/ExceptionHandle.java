@@ -27,7 +27,7 @@ public class ExceptionHandle {
         }
         else {
             logger.error("[ 系统异常 ] {} ", e);
-            return ResultUtil.error(100, e.getMessage());
+            return ResultUtil.error(999, e.getMessage());
         }
     }
 

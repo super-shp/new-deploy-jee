@@ -18,7 +18,7 @@ import java.io.IOException;
 @RestController
 public class ImgUploadController {
     @PostMapping("/upload-img")
-    public UnifyResponse<String> uploadImgQiniu(@RequestParam("uploadImg") MultipartFile multipartFile) throws IOException {
+    public UnifyResponse<String> uploadImgQiniu(@RequestParam("uploadImg") MultipartFile multipartFile) throws Exception {
         FileInputStream inputStream = (FileInputStream) multipartFile.getInputStream();
         QiniuUpload qiniuUpload = new QiniuUpload();
         String path = qiniuUpload.fileUpLoad(inputStream, multipartFile.getOriginalFilename());

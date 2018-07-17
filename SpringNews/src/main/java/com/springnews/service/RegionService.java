@@ -20,7 +20,7 @@ public class RegionService {
     public RegionList getRegionList() throws Exception{
         List<Region> allRegion = regionRepository.findAll();
         if(allRegion.size() <= 0){
-            throw new NewsException(ResultEnum.OPTION_FAILED);
+            throw new NewsException(ResultEnum.QUERY_ERROR);
         }
         RegionList regionList = new RegionList();
         regionList.setTotal(allRegion.size());

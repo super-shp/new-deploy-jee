@@ -52,6 +52,19 @@ public class NewsController {
         return ResultUtil.successs(ResultEnum.OK, regionList);
     }
 
+    @PostMapping(path = "post-article")
+    public UnifyResponse publishNews(@RequestHeader("Authorization") String token, @RequestBody String requestBody) throws Exception{
+        JSONObject jsonObject = JSONObject.fromObject(requestBody);
+        String title = jsonObject.getString("title");
+        int cid = jsonObject.getInt("cid");
+        String username = getUserName(token);
+        String cover = jsonObject.getString("cover");
+        String contents = jsonObject.getString("content");
+
+        newsService.publishNews(title, cid, username, cover, contents);
+        return ResultUtil.successs(ResultEnum.OK);
+    }
+
     @PostMapping(path = "/test-mongodb")
     public UnifyResponse testDB(@RequestHeader("Authorization") String token, @RequestBody String requestBody) {
         System.out.println("test");

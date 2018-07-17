@@ -7,7 +7,7 @@ public class NewsException extends RuntimeException {
     private int code;
 
     public NewsException(ResultEnum resultEnum){
-        super(resultEnum.getMsg());
+        super("NewsException:" + resultEnum.getMsg());
         this.code = resultEnum.getCode();
     }
 

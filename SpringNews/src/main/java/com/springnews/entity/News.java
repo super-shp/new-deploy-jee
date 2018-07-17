@@ -9,9 +9,8 @@ import java.util.Date;
 public class News {
     @Id
     @GeneratedValue
-    private int id;
-
     private int pid;
+
     private String figure;
     private String uid;
     private String cover;
@@ -25,14 +24,6 @@ public class News {
     private Date updated_time;
     private int liked;
     private int status;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getCid() {
         return cid;

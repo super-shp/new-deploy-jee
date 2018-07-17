@@ -26,7 +26,7 @@ public class QiniuUpload {
     }
 
     //参数为文件路径以及文件名,文件名要求带后缀比如.jpg
-    public String fileUpLoad(FileInputStream file, String key){
+    public String fileUpLoad(FileInputStream file, String key) throws Exception{
         String upToken = qiniuAuth.getAuth().uploadToken(qiniuAuth.getBucket());
         try {
             Response response = uploadManager.put(file, key, upToken, null, null);
@@ -38,12 +38,7 @@ public class QiniuUpload {
         } catch (QiniuException ex) {
             Response r = ex.response;
             System.err.println(r.toString());
-            try {
-                System.err.println(r.bodyString());
-            } catch (QiniuException ex2) {
-                //ignore
-            }
-            return null;
+            throw ex;
         }
     }
 }
