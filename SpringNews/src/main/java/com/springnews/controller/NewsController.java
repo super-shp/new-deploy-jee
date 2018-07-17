@@ -2,19 +2,30 @@ package com.springnews.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
+import com.springnews.entity.NewsEntity;
+import com.springnews.service.NewsEntityService;
 import com.springnews.service.NewsService;
 import com.springnews.service.RegionService;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class NewsController {
     @Autowired
     private NewsService newsService;
+
+    @Autowired
+    private NewsEntityService newsEntityService;
 
     @Autowired
     private RegionService regionService;
@@ -65,6 +76,39 @@ public class NewsController {
         }
         else{
             return responseJson.responseJson(200, "OK", null);
+        }
+    }
+
+    @PostMapping(path = "/test-mongodb")
+    public String testDB(HttpServletRequest request) {
+        System.out.println("test");
+        int pid = 2;
+        String content = "{}";
+        NewsEntity news = new NewsEntity();
+        news.setPid(pid);
+        DBObject bson = (DBObject) JSON.parse(content);
+        news.setContent(bson);
+        newsEntityService.saveNewsEntity(news);
+
+        String token = request.getHeader("Authorization");
+        String username = getUserName(token);
+        System.out.println(username);
+
+        return null;
+    }
+
+    private String getUserName(String token){
+
+        if (token != null) {
+            // parse the token.
+            String user = Jwts.parser()
+                    .setSigningKey("MyJwtSecret")
+                    .parseClaimsJws(token.replace("Bearer ", ""))
+                    .getBody()
+                    .getSubject();
+            return user;
+        } else {
+            return null;
         }
     }
 }
