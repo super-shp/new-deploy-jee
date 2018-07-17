@@ -1,8 +1,13 @@
 package com.springnews.controller;
 
 
-import com.google.gson.JsonObject;
-import com.springnews.utils.ResponseCode;
+import com.springnews.controller.postinfo.PostNewsListJson;
+import com.springnews.controller.postinfo.PostNewsOptionJson;
+import com.springnews.entity.*;
+import com.springnews.enums.ResultEnum;
+import com.springnews.exception.NewsException;
+import com.springnews.utils.ResultUtil;
+import com.springnews.utils.UnifyResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import com.mongodb.DBObject;
@@ -16,10 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-
 @RestController
 public class NewsController {
     @Autowired
@@ -31,57 +32,28 @@ public class NewsController {
     @Autowired
     private RegionService regionService;
 
-    private ResponseJson responseJson = new ResponseJson();
-
     @PostMapping(path = "/article-list")
-    public String getNewsList(@RequestParam("currentPage") int currentPage, @RequestParam("pageSize") int pageSize, @RequestParam("filter") String filter){
-        JsonObject newsList = newsService.getNewsList(currentPage, pageSize, filter);
-        if(newsList!=null){
-            return responseJson.responseJson(200, "OK", newsList);
-        }
-        else{
-            return responseJson.responseJson(200, "OK", null);
-        }
+    public UnifyResponse<NewsList> getNewsList(@RequestBody PostNewsListJson postNewsListJson) throws NewsException{
+        System.out.println(postNewsListJson.getCurrentPage());
+        NewsList newsList = newsService.getNewsList(postNewsListJson.getCurrentPage(), postNewsListJson.getPageSize(), postNewsListJson.getFilter());
+        return ResultUtil.successs(ResultEnum.OK, newsList);
+
     }
 
     @PostMapping(path = "/option")
-    public String NewsOperate(@RequestParam("pid") int pid, @RequestParam("op") String op){
-        switch (op){
-            case "set-top":
-                if(newsService.setTopByPid(pid)){
-                    return responseJson.responseJson(200, "OK", null);
-                }
-                else {
-                    return responseJson.responseJson(100, "OK", null);
-                }
-            case "callback":
-                if(newsService.callBackByPid(pid)){
-                    return responseJson.responseJson(200, "OK", null);
-                }
-                else {
-                    return responseJson.responseJson(100, "OK", null);
-                }
-            case "delete":
-                newsService.deleteByPid(pid);
-                return responseJson.responseJson(200, "OK", null);
-            default:
-                return responseJson.responseJson(100, "OK", null);
-        }
+    public UnifyResponse NewsOperate(@RequestBody PostNewsOptionJson postNewsOptionJson) throws NewsException{
+        newsService.newsOperate(postNewsOptionJson.getPid(), postNewsOptionJson.getOp());
+        return ResultUtil.successs(ResultEnum.OK);
     }
 
     @PostMapping(path = "/get-column")
-    public String getColumnList(){
-        JsonObject regionList = regionService.getRegionList();
-        if(regionList!=null){
-            return responseJson.responseJson(200, "OK", regionList);
-        }
-        else{
-            return responseJson.responseJson(200, "OK", null);
-        }
+    public UnifyResponse<RegionList> getColumnList() throws Exception{
+        RegionList regionList = regionService.getRegionList();
+        return ResultUtil.successs(ResultEnum.OK, regionList);
     }
 
     @PostMapping(path = "/test-mongodb")
-    public String testDB(@RequestHeader("Authorization") String token, @RequestBody String requestBody) {
+    public UnifyResponse testDB(@RequestHeader("Authorization") String token, @RequestBody String requestBody) {
         System.out.println("test");
         int pid = 2;
         String content = "{}";
@@ -103,14 +75,16 @@ public class NewsController {
         System.out.println(arr);
 
 
-        if (true){
-            return responseJson.responseJson(ResponseCode.SUCCESS,null);
-        }else if(false){
-            return responseJson.responseJson(ResponseCode.UNKNOW_ERROR, null);
-        }else {
-            // 或者可以自由定义返回值，但通常不建议这么做
-            return responseJson.responseJson(100, "OK", null);
-        }
+        return ResultUtil.successs(ResultEnum.OK);
+
+//        if (true){
+//            return responseJson.responseJson(ResponseCode.SUCCESS,null);
+//        }else if(false){
+//            return responseJson.responseJson(ResponseCode.UNKNOW_ERROR, null);
+//        }else {
+//            // 或者可以自由定义返回值，但通常不建议这么做
+//            return responseJson.responseJson(100, "OK", null);
+//        }
 
     }
 

@@ -1,6 +1,7 @@
 package com.springnews.controller;
 
 import com.springnews.entity.*;
+import com.springnews.enums.ResultEnum;
 import com.springnews.qiniu.QiniuUpload;
 import com.springnews.service.UserService;
 import com.springnews.utils.ResultUtil;
@@ -59,12 +60,12 @@ public class StartController {
     @GetMapping(value = "/users")
     public UnifyResponse<MyUser> queryUsers(){
 
-        return ResultUtil.successs(userRepository.findAll());
+        return ResultUtil.successs(ResultEnum.OK, userRepository.findAll());
     }
 
     @GetMapping(value = "/user/{id}")
     public UnifyResponse<MyUser> queryUser(@PathVariable("id") String uid){
-        return ResultUtil.successs(userService.findByUid(uid));
+        return ResultUtil.successs(ResultEnum.OK, userService.findByUid(uid));
     }
 
 }
