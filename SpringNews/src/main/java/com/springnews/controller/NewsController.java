@@ -54,18 +54,10 @@ public class NewsController {
 
     @PostMapping(path = "/test-mongodb")
     public UnifyResponse testDB(@RequestHeader("Authorization") String token, @RequestBody String requestBody) {
-        System.out.println("test");
-        int pid = 2;
-        String content = "{}";
-        NewsEntity news = new NewsEntity();
-        news.setPid(pid);
-        DBObject bson = (DBObject) JSON.parse(content);
-        news.setContent(bson);
-        newsEntityService.saveNewsEntity(news);
 
         String username = getUserName(token);
-        System.out.println(username);
 
+        System.out.println(username);
         System.out.println(requestBody.getClass());
 
         JSONObject jsonObject = JSONObject.fromObject(requestBody);
@@ -73,6 +65,13 @@ public class NewsController {
         JSONObject contents = jsonObject.getJSONObject("content");
         JSONArray arr = contents.getJSONArray("arr");
         System.out.println(arr);
+
+        NewsEntity news = new NewsEntity();
+        news.setPid(uid);
+        DBObject bson = (DBObject) com.mongodb.util.JSON.parse(contents
+                .toString());
+        news.setContent(bson);
+        newsEntityService.saveNewsEntity(news);
 
 
         return ResultUtil.successs(ResultEnum.OK);
