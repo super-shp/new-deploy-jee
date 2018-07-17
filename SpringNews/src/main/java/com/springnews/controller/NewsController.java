@@ -33,15 +33,15 @@ public class NewsController {
     private RegionService regionService;
 
     @PostMapping(path = "/article-list")
-    public UnifyResponse<NewsList> getNewsList(@RequestBody PostNewsListJson postNewsListJson) throws NewsException{
-        System.out.println(postNewsListJson.getCurrentPage());
-        NewsList newsList = newsService.getNewsList(postNewsListJson.getCurrentPage(), postNewsListJson.getPageSize(), postNewsListJson.getFilter());
+    public UnifyResponse<NewsList> getNewsList(@RequestHeader("Authorization") String token, @RequestBody PostNewsListJson postNewsListJson) throws Exception{
+        String username = getUserName(token);
+        NewsList newsList = newsService.getNewsList(postNewsListJson.getCurrentPage(), postNewsListJson.getPageSize(), postNewsListJson.getFilter(), username);
         return ResultUtil.successs(ResultEnum.OK, newsList);
 
     }
 
     @PostMapping(path = "/option")
-    public UnifyResponse NewsOperate(@RequestBody PostNewsOptionJson postNewsOptionJson) throws NewsException{
+    public UnifyResponse NewsOperate(@RequestBody PostNewsOptionJson postNewsOptionJson) throws Exception{
         newsService.newsOperate(postNewsOptionJson.getPid(), postNewsOptionJson.getOp());
         return ResultUtil.successs(ResultEnum.OK);
     }

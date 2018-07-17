@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
-public class News {
+public class News implements Comparable<News>{
     @Id
     @GeneratedValue
     private int pid;
@@ -24,6 +24,16 @@ public class News {
     private Date updated_time;
     private int liked;
     private int status;
+
+    @Override
+    public int compareTo(News news){
+        if(this.updated_time.getTime() > news.getUpdated_time().getTime()){
+            return -1;
+        }
+        else{
+            return 1;
+        }
+    }
 
     public int getCid() {
         return cid;
