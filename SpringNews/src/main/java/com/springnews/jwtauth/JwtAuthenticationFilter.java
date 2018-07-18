@@ -25,8 +25,9 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         String header = req.getHeader("Authorization");
 
         if (header == null || !header.startsWith("Bearer ")) {
-            res.setStatus(403);
-            return;
+//            res.setStatus(403);
+//            return;
+            chain.doFilter(req, res);
         }
 
         try {
