@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.springnews.entity.*;
 import com.springnews.enums.ResultEnum;
+import com.springnews.service.NewsEntityService;
+import com.springnews.service.UserService;
 import com.springnews.utils.ResultUtil;
 import com.springnews.utils.UUIDUtils;
 import com.springnews.utils.UnifyResponse;
@@ -23,8 +25,13 @@ public class UserController {
 
     @Autowired
     private UserRepository applicationUserRepository;
+
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private UserService userService;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserController(UserRepository myUserRepository,
@@ -65,20 +72,7 @@ public class UserController {
     public UnifyResponse<MyUser> getInfo(@RequestHeader("Authorization") String token) {
         String username = getUserName(token);
         MyUser user = applicationUserRepository.findByUsername(username);
-        String uid = user.getUid();
-        UserInfo userInfo = userInfoRepository.findByUid(uid);
-
-        TimeFormatTransform transformer = new TimeFormatTransform();
-        JSONObject infoJson = new JSONObject();
-        infoJson.put("id", user.getId());
-        infoJson.put("uid", user.getUid());
-        infoJson.put("author", user.getAuthor());
-        infoJson.put("likes", userInfo.getLiked());
-        infoJson.put("words", userInfo.getWords());
-        infoJson.put("status", user.getStatus());
-        infoJson.put("created_time", transformer.dateToTimeStamp(user.getCreated_time()));
-        infoJson.put("updated_time", transformer.dateToTimeStamp(user.getUpdated_time()));
-        System.out.println(infoJson);
+        JSONObject infoJson = userService.getUserInfo(user);
         return ResultUtil.successs(ResultEnum.OK, infoJson);
     }
 
