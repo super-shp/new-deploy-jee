@@ -65,8 +65,13 @@ public class NewsController {
         return ResultUtil.successs(ResultEnum.OK);
     }
 
-    @PostMapping(path = "/test-mongodb")
-    public UnifyResponse testDB(@RequestHeader("Authorization") String token, @RequestBody String requestBody) {
+    @PostMapping(path = "/get-content")
+    public UnifyResponse getContent(@RequestHeader("Authorization") String token, @RequestBody String requestBody){
+        return ResultUtil.successs(ResultEnum.OK);
+    }
+
+    @PostMapping(path = "/post-mongodb")
+    public UnifyResponse postContent(@RequestHeader("Authorization") String token, @RequestBody String requestBody) {
 
         String username = getUserName(token);
 
@@ -86,17 +91,7 @@ public class NewsController {
         news.setContent(bson);
         newsEntityService.saveNewsEntity(news);
 
-
         return ResultUtil.successs(ResultEnum.OK);
-
-//        if (true){
-//            return responseJson.responseJson(ResponseCode.SUCCESS,null);
-//        }else if(false){
-//            return responseJson.responseJson(ResponseCode.UNKNOW_ERROR, null);
-//        }else {
-//            // 或者可以自由定义返回值，但通常不建议这么做
-//            return responseJson.responseJson(100, "OK", null);
-//        }
 
     }
 

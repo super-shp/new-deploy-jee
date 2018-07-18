@@ -15,6 +15,14 @@ public class NewsEntity implements Serializable {
     private int pid;
     private DBObject content;
 
+    public int getPid() {
+        return pid;
+    }
+
+    public DBObject getContent() {
+        return content;
+    }
+
     public void setPid(int pid) {
         this.pid = pid;
     }
