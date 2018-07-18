@@ -16,10 +16,21 @@ public class ResultUtil {
         return successs(resultEnum,null);
     }
 
+    public static UnifyResponse error(ResultEnum resultEnum, Object object){
+        UnifyResponse response = new UnifyResponse();
+        response.setCode(resultEnum.getCode());
+        response.setMsg(resultEnum.getMsg());
+        return response;
+    }
+
     public static UnifyResponse error(Integer code, String msg){
         UnifyResponse response = new UnifyResponse();
         response.setCode(code);
         response.setMsg(msg);
         return response;
+    }
+
+    public static UnifyResponse error(ResultEnum resultEnum){
+        return error(resultEnum,null);
     }
 }

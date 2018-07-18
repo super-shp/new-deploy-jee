@@ -47,6 +47,11 @@ public class UserController {
 
     @PostMapping("/signup")
     public UnifyResponse<MyUser> signUp(@RequestBody MyUser user) {
+
+        if(applicationUserRepository.findByUsername(user.getUsername()) != null){
+            return ResultUtil.error(ResultEnum.SAME_USER_EXIST);
+        }
+
         // 写入User表
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         String uid = UUIDUtils.getUUID();

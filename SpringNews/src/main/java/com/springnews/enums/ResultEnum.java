@@ -7,6 +7,7 @@ public enum ResultEnum {
     USER_AUTH_ERROR(101, "user do not have root auth"),
     PARAM_ERROR(102, "you gave me an illegal param"),
     QUERY_ERROR(103, "the data you want do not exist"),
+    SAME_USER_EXIST(301, "your username is already exist in the database"),
     UNKNOWN_FAILED(999, "unknown failed")
     ;
     private int code;
