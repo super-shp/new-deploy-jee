@@ -65,6 +65,7 @@ public class UserController {
         userinfo.setFigure("");
         userinfo.setWords(0);
         userInfoRepository.save(userinfo);
+        System.out.println("注册用户成功");
         return ResultUtil.successs(ResultEnum.OK, user);
     }
 
