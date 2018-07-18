@@ -70,6 +70,7 @@ public class UserService {
         infoJson.put("likes", userInfo.getLiked());
         infoJson.put("words", userInfo.getWords());
         infoJson.put("status", user.getStatus());
+        infoJson.put("root", user.getRoot());
         infoJson.put("created_time", transformer.dateToTimeStamp(user.getCreated_time()));
         infoJson.put("updated_time", transformer.dateToTimeStamp(user.getUpdated_time()));
         System.out.println(infoJson);
