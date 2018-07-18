@@ -22,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/article")
 public class NewsController {
     @Autowired
     private NewsService newsService;

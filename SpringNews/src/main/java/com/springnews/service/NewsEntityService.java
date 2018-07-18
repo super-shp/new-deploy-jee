@@ -18,13 +18,13 @@ public class NewsEntityService {
      * @param news
      */
     public void saveNewsEntity(NewsEntity news) {
-        System.out.println("保存至mongodb");
+        System.out.println(" 保存至 mongodb");
 
         mongoTemplate.save(news);
     }
 
     /**
-     * 根据pid查找文章
+     * 根据 pid 查找文章
      * @param pid
      * @return
      */
@@ -41,9 +41,9 @@ public class NewsEntityService {
     public void updateNewsByPid(NewsEntity news) {
         Query query=new Query(Criteria.where("pid").is(news.getPid()));
         Update update= new Update().set("content", news.getContent());
-        //更新查询返回结果集的第一条
+        // 更新查询返回结果集的第一条
         mongoTemplate.updateFirst(query,update,NewsEntity.class);
-        //更新查询返回结果集的所有
+        // 更新查询返回结果集的所有
         // mongoTemplate.updateMulti(query,update,UserEntity.class);
     }
 
