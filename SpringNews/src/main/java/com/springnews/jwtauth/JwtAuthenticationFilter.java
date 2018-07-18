@@ -25,13 +25,18 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         String header = req.getHeader("Authorization");
 
         if (header == null || !header.startsWith("Bearer ")) {
-            chain.doFilter(req, res);
+            res.setStatus(403);
             return;
         }
 
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+        try {
+            UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }catch (Exception exception){
+            res.setStatus(403);
+            return;
+        }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(req, res);
     }
 
