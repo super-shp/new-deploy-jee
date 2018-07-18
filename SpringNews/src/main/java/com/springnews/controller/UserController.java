@@ -1,10 +1,7 @@
 package com.springnews.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import com.springnews.entity.*;
 import com.springnews.enums.ResultEnum;
-import com.springnews.service.NewsEntityService;
 import com.springnews.service.UserService;
 import com.springnews.utils.ResultUtil;
 import com.springnews.utils.UUIDUtils;
@@ -12,12 +9,10 @@ import com.springnews.utils.UnifyResponse;
 import io.jsonwebtoken.Jwts;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/auth")

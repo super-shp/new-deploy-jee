@@ -28,9 +28,6 @@ public class NewsService {
     private NewsRepository newsRepository;
 
     @Autowired
-    private NewsEntityService newsEntityService;
-
-    @Autowired
     private NewsContentService newsContentService;
 
     @Autowired
@@ -100,7 +97,7 @@ public class NewsService {
     }
 
     @Transactional
-    public int publishNews(String title, int cid, String username, String cover, String content) throws Exception{
+    public int publishNews(String title, int cid, String username, String cover, String intro) throws Exception{
         MyUser user = userService.findByUsername(username);
         UserInfo userInfo = userInfoService.findByUid(user.getUid());
         if(user.getRoot() != 0){
@@ -111,22 +108,17 @@ public class NewsService {
         news.setCreated_time(new Date()); news.setUpdated_time(new Date());
         news.setUid(user.getUid());news.setAuthor(user.getAuthor());news.setFigure(userInfo.getFigure());
         news.setStatus(1);news.setVisited(0);news.setLiked(0);
-        int length = content.length();
-        if(length <= 100){
-            news.setIntro(content);
-        }
-        else{
-            news.setIntro(content.substring(0,100));
-        }
+        news.setIntro(intro);
         News temp = newsRepository.save(news);
-        newsContentService.publishNews(temp.getPid(), content);
         return news.getPid();
     }
 
     public Article getNewsByPid(int pid) throws Exception{
         TimeFormatTransform timeFormatTransform = new TimeFormatTransform();
         News news = newsRepository.findByPid(pid);
-        NewsContent newsContent = newsContentService.findByPid(pid);
+        NewsContent newsContent = newsContentService.findNewsByPid(pid);
+        System.out.println(news);
+        System.out.println(newsContent);
         if(news==null || newsContent==null){
             throw new NewsException(ResultEnum.QUERY_ERROR);
         }
@@ -140,6 +132,7 @@ public class NewsService {
         article.setUpdated_time(timeFormatTransform.dateToTimeStamp(news.getUpdated_time()));
         article.setCid(news.getCid());article.setVisited(news.getVisited());
         article.setLiked(news.getLiked());article.setCover(news.getCover());
+
         article.setContent(newsContent.getContent());
 
         if(user != null){

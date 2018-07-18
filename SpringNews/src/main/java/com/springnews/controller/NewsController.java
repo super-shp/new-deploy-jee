@@ -5,20 +5,14 @@ import com.springnews.controller.postinfo.PostNewsListJson;
 import com.springnews.controller.postinfo.PostNewsOptionJson;
 import com.springnews.entity.*;
 import com.springnews.enums.ResultEnum;
-import com.springnews.exception.NewsException;
+import com.springnews.service.NewsContentService;
 import com.springnews.utils.ResultUtil;
 import com.springnews.utils.UnifyResponse;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
-import com.springnews.entity.NewsEntity;
-import com.springnews.service.NewsEntityService;
 import com.springnews.service.NewsService;
 import com.springnews.service.RegionService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +22,7 @@ public class NewsController {
     private NewsService newsService;
 
     @Autowired
-    private NewsEntityService newsEntityService;
+    private NewsContentService newsContentService;
 
     @Autowired
     private RegionService regionService;
@@ -56,13 +50,19 @@ public class NewsController {
     @PostMapping(path = "post-article")
     public UnifyResponse publishNews(@RequestHeader("Authorization") String token, @RequestBody String requestBody) throws Exception{
         JSONObject jsonObject = JSONObject.fromObject(requestBody);
+        // 保存至mysql
         String title = jsonObject.getString("title");
         int cid = jsonObject.getInt("cid");
         String username = getUserName(token);
         String cover = jsonObject.getString("cover");
-        String contents = jsonObject.getString("content");
+        String intro = jsonObject.getString("intro");
+        int pid = newsService.publishNews(title, cid, username, cover, intro);
 
-        newsService.publishNews(title, cid, username, cover, contents);
+        // 保存至mongodb
+        JSONObject contents = jsonObject.getJSONObject("content");
+        int words = jsonObject.getInt("words");
+        //DBObject bson = (DBObject) com.mongodb.util.JSON.parse(contents.toString());
+        newsContentService.publishNews(pid, contents.toString(), words);
         return ResultUtil.successs(ResultEnum.OK);
     }
 
@@ -71,31 +71,6 @@ public class NewsController {
         JSONObject jsonObject = JSONObject.fromObject(requestBody);
         int pid = jsonObject.getInt("pid");
         return ResultUtil.successs(ResultEnum.OK, newsService.getNewsByPid(pid));
-    }
-
-    @PostMapping(path = "/post-mongodb")
-    public UnifyResponse postContent(@RequestHeader("Authorization") String token, @RequestBody String requestBody) {
-
-        String username = getUserName(token);
-
-        System.out.println(username);
-        System.out.println(requestBody.getClass());
-
-        JSONObject jsonObject = JSONObject.fromObject(requestBody);
-        int uid = jsonObject.getInt("uid");
-        JSONObject contents = jsonObject.getJSONObject("content");
-        JSONArray arr = contents.getJSONArray("arr");
-        System.out.println(arr);
-
-        NewsEntity news = new NewsEntity();
-        news.setPid(uid);
-        DBObject bson = (DBObject) com.mongodb.util.JSON.parse(contents
-                .toString());
-        news.setContent(bson);
-        newsEntityService.saveNewsEntity(news);
-
-        return ResultUtil.successs(ResultEnum.OK);
-
     }
 
     private String getUserName(String token){

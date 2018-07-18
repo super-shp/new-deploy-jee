@@ -1,5 +1,7 @@
 package com.springnews.entity;
 
+import com.mongodb.DBObject;
+
 public class Article {
     private int pid;
     private String title;

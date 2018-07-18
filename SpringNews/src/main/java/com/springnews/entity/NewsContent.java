@@ -1,5 +1,6 @@
 package com.springnews.entity;
 
+import com.mongodb.DBObject;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.GeneratedValue;
