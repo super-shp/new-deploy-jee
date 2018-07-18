@@ -45,14 +45,13 @@ public class NewsService {
         if(currentPage < 0 || pageSize < 0){
             throw new NewsException(ResultEnum.PARAM_ERROR);
         }
-        List<News> allNews = newsRepository.findAll();
 //        if (allNews.size() <= (currentPage-1)*pageSize){
 //            throw new NewsException(ResultEnum.QUERY_ERROR);
 //        }
 
         MyUser user = userService.findByUsername(username);
         NewsList newsList = new NewsList();
-        newsList.setTotal(allNews.size());
+        newsList.setTotal(newsRepository.findAll().size());
         newsList.setOffset(currentPage*(pageSize+1));
         if(currentPage == 0){
             News topNews = newsRepository.findByStatus(2).get(0);
@@ -124,29 +123,33 @@ public class NewsService {
         return news.getPid();
     }
 
-//    public JsonObject getNews(int pid){
-//        TimeFormatTransform timeFormatTransform = new TimeFormatTransform();
-//        News news = newsRepository.findByPid(pid);
-//        NewsContent newsContent = newsContentService.findByPid(pid);
-//        String uid = news.getUid();
-//        MyUser user = userService.findByUid(uid);
-//
-//        JsonObject newsJson = new JsonObject();
-//        newsJson.addProperty("pid", news.getPid());
-//        newsJson.addProperty("uid", news.getUid());
-//        newsJson.addProperty("liked", news.getLiked());
-//        newsJson.addProperty("cover", news.getCover());
-//        newsJson.addProperty("title", news.getTitle());
-//        newsJson.addProperty("author", user.getAuthor());
-//        newsJson.addProperty("intro", news.getIntro());
-//        newsJson.addProperty("region_name", news.getRegion());
-//        newsJson.addProperty("visited", news.getVisited());
-//        newsJson.addProperty("cid", news.getCid());
-//        newsJson.addProperty("updated_time", timeFormatTransform.dateToTimeStamp(news.getUpdated_time()));
-//        newsJson.addProperty("content", newsContent.getContent());
-//        newsJson.addProperty("words", newsContent.getWords());
-//        return newsJson;
-//    }
+    public Article getNewsByPid(int pid) throws Exception{
+        TimeFormatTransform timeFormatTransform = new TimeFormatTransform();
+        News news = newsRepository.findByPid(pid);
+        NewsContent newsContent = newsContentService.findByPid(pid);
+        if(news==null || newsContent==null){
+            throw new NewsException(ResultEnum.QUERY_ERROR);
+        }
+        String uid = news.getUid();
+        MyUser user = userService.findByUid(uid);
+
+        Article article = new Article();
+
+        article.setPid(news.getPid());article.setTitle(news.getTitle());
+        article.setUid(news.getUid());article.setWords(newsContent.getWords());
+        article.setUpdated_time(timeFormatTransform.dateToTimeStamp(news.getUpdated_time()));
+        article.setCid(news.getCid());article.setVisited(news.getVisited());
+        article.setLiked(news.getLiked());article.setCover(news.getCover());
+        article.setContent(newsContent.getContent());
+
+        if(user != null){
+            article.setAuthor(user.getAuthor());
+        }
+        else{
+            article.setAuthor("未查询到该文章作者");
+        }
+        return article;
+    }
 
     @Transactional
     public boolean setTopByPid(int pid) throws Exception{

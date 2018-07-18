@@ -65,9 +65,11 @@ public class NewsController {
         return ResultUtil.successs(ResultEnum.OK);
     }
 
-    @PostMapping(path = "/get-content")
-    public UnifyResponse getContent(@RequestHeader("Authorization") String token, @RequestBody String requestBody){
-        return ResultUtil.successs(ResultEnum.OK);
+    @PostMapping(path = "/get-article")
+    public UnifyResponse getArticle(@RequestHeader("Authorization") String token, @RequestBody String requestBody) throws Exception{
+        JSONObject jsonObject = JSONObject.fromObject(requestBody);
+        int pid = jsonObject.getInt("pid");
+        return ResultUtil.successs(ResultEnum.OK, newsService.getNewsByPid(pid));
     }
 
     @PostMapping(path = "/post-mongodb")
