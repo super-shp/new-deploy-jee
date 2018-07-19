@@ -1,17 +1,16 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/news_deploy?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/news_deploy
     username: root
     password: root
   data:
     mongodb:
       uri: mongodb://localhost:27017/springnews
+      database: springnews
+      username: root
+      password: root
   jpa:
     hibernate:
       ddl-auto: update
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     show-sql: true
-    properties:
-      hibernate:
-        dialect: com.springnews.utils.MySQL5DialectUTF8
