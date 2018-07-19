@@ -122,13 +122,20 @@ public class NewsService {
         news.setUid(user.getUid());news.setAuthor(user.getAuthor());news.setFigure(userInfo.getFigure());
         news.setStatus(1);news.setVisited(0);news.setLiked(0);
         news.setIntro(intro);
-        newsRepository.save(news);
-        int pid = news.getPid();
-        // 保存至mongodb
         JSONObject contents = jsonObject.getJSONObject("content");
         int words = jsonObject.getInt("words");
-        //DBObject bson = (DBObject) com.mongodb.util.JSON.parse(contents.toString());
-        newsContentService.publishNews(pid, contents.toString(), words);
+        int pid = 0;
+        try {
+            pid = jsonObject.getInt("pid");
+            news.setPid(pid);
+            newsRepository.saveAndFlush(news);
+            newsContentService.updateNewsByPid(pid,contents.toString(), words); // 如果有传值pid,执行更新
+        }catch (Exception e){
+            newsRepository.save(news);
+            pid = news.getPid();
+            // 保存至mongodb
+            newsContentService.publishNews(pid, contents.toString(), words);    // 执行保存操作
+        }
         return pid;
     }
 
