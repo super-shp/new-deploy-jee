@@ -44,9 +44,9 @@ public class NewsContentService {
      * 更新对象
      * @param news
      */
-    public void updateNewsByPid(NewsContent news) {
-        Query query = new Query(Criteria.where("pid").is(news.getPid()));
-        Update update= new Update().set("content", news.getContent()).set("words", news.getWords());
+    public void updateNewsByPid(int pid, String content, int words) {
+        Query query = new Query(Criteria.where("pid").is(pid));
+        Update update= new Update().set("content", content).set("words", words);
         // 更新查询返回结果集的第一条
         mongoTemplate.updateFirst(query,update,NewsContent.class);
         return;

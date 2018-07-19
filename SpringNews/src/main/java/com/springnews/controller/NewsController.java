@@ -51,7 +51,7 @@ public class NewsController {
         return ResultUtil.successs(ResultEnum.OK, regionList);
     }
 
-    @PostMapping(path = "post-article")
+    @PostMapping(path = "/post-article")
     public UnifyResponse publishNews(HttpServletRequest req, HttpServletResponse res, @RequestBody String requestBody) throws Exception{
         String token = req.getHeader("Authorization");
         if (token == null){
@@ -59,10 +59,11 @@ public class NewsController {
             return null;
         }
         JSONObject jsonObject = JSONObject.fromObject(requestBody);
+        String username = getUserName(token);
+
         // 保存至mysql
         String title = jsonObject.getString("title");
         int cid = jsonObject.getInt("cid");
-        String username = getUserName(token);
         String cover = jsonObject.getString("cover");
         String intro = jsonObject.getString("intro");
         int pid = newsService.publishNews(title, cid, username, cover, intro);
@@ -72,6 +73,27 @@ public class NewsController {
         int words = jsonObject.getInt("words");
         //DBObject bson = (DBObject) com.mongodb.util.JSON.parse(contents.toString());
         newsContentService.publishNews(pid, contents.toString(), words);
+        return ResultUtil.successs(ResultEnum.OK);
+    }
+
+    @PostMapping(path = "/modify-article")
+    public UnifyResponse modifyNews(HttpServletRequest req, HttpServletResponse res, @RequestBody String requestBody) throws Exception{
+        String token = req.getHeader("Authorization");
+        if (token == null){
+            res.setStatus(403);
+            return null;
+        }
+        String username = getUserName(token);
+        JSONObject jsonObject = JSONObject.fromObject(requestBody);
+        // 修改mysql里的数据
+        newsService.modifyNews(username, jsonObject);
+
+        // 修改mongoDB里的数据
+        JSONObject contents = jsonObject.getJSONObject("content");
+        int words = jsonObject.getInt("words");
+        int pid = jsonObject.getInt("pid");
+        //DBObject bson = (DBObject) com.mongodb.util.JSON.parse(contents.toString());
+        newsContentService.updateNewsByPid(pid, contents.toString(), words);
         return ResultUtil.successs(ResultEnum.OK);
     }
 

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,9 @@ import java.util.List;
 
 @Service
 public class NewsService {
+
+    private JdbcTemplate jdbcTemplate;
+
     @Autowired
     private NewsRepository newsRepository;
 
@@ -111,6 +115,29 @@ public class NewsService {
         news.setIntro(intro);
         News temp = newsRepository.save(news);
         return news.getPid();
+    }
+
+    @Transactional
+    public boolean modifyNews(String username, JSONObject jsonObject) throws Exception{
+        MyUser user = userService.findByUsername(username);
+        UserInfo userInfo = userInfoService.findByUid(user.getUid());
+        if(user.getRoot() != 0){
+            throw new UserException(ResultEnum.USER_AUTH_ERROR);
+        }
+        String sql="update news set title=?,cid=?,cover=?,updated_time=?,author=?,figure=?,intro=? where pid=?";
+
+        this.jdbcTemplate.update(sql, new Object[]{
+                jsonObject.getString("title"),
+                jsonObject.getInt("cid"),
+                jsonObject.getString("cover"),
+                new Date(),
+                user.getAuthor(),
+                userInfo.getFigure(),
+                jsonObject.getString("intro"),
+                jsonObject.getInt("pid")
+        });
+
+        return true;
     }
 
     public Article getNewsByPid(int pid) throws Exception{
