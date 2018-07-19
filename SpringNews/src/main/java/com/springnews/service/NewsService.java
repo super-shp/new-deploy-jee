@@ -42,7 +42,6 @@ public class NewsService {
 
     public NewsList getNewsList(Integer currentPage, Integer pageSize, String filter, String username) throws Exception{
         currentPage = currentPage - 1;
-        pageSize = pageSize - 1;
         if(currentPage < 0 || pageSize < 0){
             throw new NewsException(ResultEnum.PARAM_ERROR);
         }
@@ -53,13 +52,7 @@ public class NewsService {
         MyUser user = userService.findByUsername(username);
         NewsList newsList = new NewsList();
         newsList.setTotal(newsRepository.findAll().size());
-        newsList.setOffset(currentPage*(pageSize+1));
-        if(currentPage == 0){
-            News topNews = newsRepository.findByStatus(2).get(0);
-            if(topNews!=null) {
-                newsList.getArticleList().add(topNews);
-            }
-        }
+        newsList.setOffset(currentPage * pageSize);
 
         if(user == null){
             user = new MyUser();
@@ -89,9 +82,9 @@ public class NewsService {
         }
         newsList.getArticleList().sort(Comparator.naturalOrder());
         if(currentPage == 0){
-            News topNews = newsRepository.findByStatus(2).get(0);
-            if(topNews!=null) {
-                newsList.getArticleList().add(0, topNews);
+            List<News> topNews = newsRepository.findByStatus(2);
+            if(topNews.size()==1) {
+                newsList.getArticleList().add(0, topNews.get(0));
             }
         }
 
