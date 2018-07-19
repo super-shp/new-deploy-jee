@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/article")
@@ -51,7 +52,12 @@ public class NewsController {
     }
 
     @PostMapping(path = "post-article")
-    public UnifyResponse publishNews(@RequestHeader("Authorization") String token, @RequestBody String requestBody) throws Exception{
+    public UnifyResponse publishNews(HttpServletRequest req, HttpServletResponse res, @RequestBody String requestBody) throws Exception{
+        String token = req.getHeader("Authorization");
+        if (token == null){
+            res.setStatus(403);
+            return null;
+        }
         JSONObject jsonObject = JSONObject.fromObject(requestBody);
         // 保存至mysql
         String title = jsonObject.getString("title");
