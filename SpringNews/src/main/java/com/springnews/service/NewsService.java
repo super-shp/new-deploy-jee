@@ -40,18 +40,21 @@ public class NewsService {
     @Autowired
     private UserInfoService userInfoService;
 
+    @Autowired
+    private RegionService regionService;
+
     public NewsList getNewsList(Integer currentPage, Integer pageSize, String filter, String username) throws Exception{
         currentPage = currentPage - 1;
         if(currentPage < 0 || pageSize < 0){
             throw new NewsException(ResultEnum.PARAM_ERROR);
         }
-//        if (allNews.size() <= (currentPage-1)*pageSize){
-//            throw new NewsException(ResultEnum.QUERY_ERROR);
-//        }
 
         MyUser user = userService.findByUsername(username);
         NewsList newsList = new NewsList();
         newsList.setTotal(newsRepository.findAll().size());
+        if(newsList.getTotal() < 1){
+            throw new NewsException(ResultEnum.QUERY_ERROR);
+        }
         newsList.setOffset(currentPage * pageSize);
 
         if(user == null){
@@ -67,6 +70,13 @@ public class NewsService {
             }
             else{
                 pages = newsRepository.findAllByTitleLike("%"+filter+"%", pageRequest);
+                if(pages.getTotalElements() == 0){
+                    Region region = regionService.findByRegionNameLike("%"+filter+"%");
+                    if(region == null){
+                        throw new NewsException(ResultEnum.QUERY_ERROR);
+                    }
+                    pages = newsRepository.findAllByCid(region.getCid(), pageRequest);
+                }
             }
         }
         else{
@@ -75,6 +85,13 @@ public class NewsService {
             }
             else {
                 pages = newsRepository.findAllByTitleLikeAndStatus("%"+filter+"%", 1, pageRequest);
+                if(pages.getTotalElements() == 0){
+                    Region region = regionService.findByRegionNameLike("%"+filter+"%");
+                    if(region == null){
+                        throw new NewsException(ResultEnum.QUERY_ERROR);
+                    }
+                    pages = newsRepository.findAllByCidAndStatus(region.getCid(), 1, pageRequest);
+                }
             }
         }
         Iterator<News> i = pages.iterator();
@@ -84,6 +101,7 @@ public class NewsService {
         while (i.hasNext()) {
             newsList.getArticleList().add(i.next());
         }
+
         newsList.getArticleList().sort(Comparator.naturalOrder());
         if(currentPage == 0){
             List<News> topNews = newsRepository.findByStatus(2);
@@ -98,17 +116,29 @@ public class NewsService {
     public int publishNews(String username, JSONObject jsonObject) throws Exception{
         MyUser user = userService.findByUsername(username);
         UserInfo userInfo = userInfoService.findByUid(user.getUid());
+        if(user == null){
+            throw new UserException(ResultEnum.USER_AUTH_ERROR);
+        }
         if(user.getRoot() != 0){
             throw new UserException(ResultEnum.USER_AUTH_ERROR);
         }
+
         String title = jsonObject.getString("title");
         int cid = jsonObject.getInt("cid");
         String cover = jsonObject.getString("cover");
         String intro = jsonObject.getString("intro");
         News news = new News();
-        news.setTitle(title);news.setCid(cid);news.setCover(cover);
+        Region region = regionService.findByCid(cid);
+        if(region!=null){
+            news.setCid(cid);
+            news.setRegion(region.getRegionName());
+        }
+        news.setTitle(title);news.setCover(cover);
         news.setCreated_time(new Date()); news.setUpdated_time(new Date());
-        news.setUid(user.getUid());news.setAuthor(user.getAuthor());news.setFigure(userInfo.getFigure());
+        news.setUid(user.getUid());news.setAuthor(user.getAuthor());
+        if(userInfo != null){
+            news.setFigure(userInfo.getFigure());
+        }
         news.setStatus(1);news.setVisited(0);news.setLiked(0);
         news.setIntro(intro);
         JSONObject contents = jsonObject.getJSONObject("content");
@@ -132,6 +162,10 @@ public class NewsService {
     public boolean modifyNews(String username, JSONObject jsonObject) throws Exception{
         MyUser user = userService.findByUsername(username);
         UserInfo userInfo = userInfoService.findByUid(user.getUid());
+        if(userInfo == null){
+            userInfo = new UserInfo();
+            userInfo.setFigure("null");
+        }
         if(user.getRoot() != 0){
             throw new UserException(ResultEnum.USER_AUTH_ERROR);
         }

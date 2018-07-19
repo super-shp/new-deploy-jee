@@ -16,6 +16,9 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
     public Page<News> findByStatus(int status, Pageable pageable);
     public List<News> findByStatus(int status);
 
+    public Page<News> findAllByCid(int cid, Pageable pageable);
+    public Page<News> findAllByCidAndStatus(int cid, int status, Pageable pageable);
+
     public Page<News> findAllByTitleLike(String filter, Pageable pageable);
     public Page<News> findAllByTitleLikeAndStatus(String filter, int status, Pageable pageable);
 }

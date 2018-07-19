@@ -27,4 +27,16 @@ public class RegionService {
         regionList.setColumnList(allRegion);
         return regionList;
     }
+
+    public Region findByRegionNameLike(String filter){
+        return regionRepository.findByRegionNameLike(filter);
+    }
+
+    public Region findByRegionName(String filter){
+        return regionRepository.findByRegionName(filter);
+    }
+
+    public Region findByCid(int cid){
+        return regionRepository.findByCid(cid);
+    }
 }
