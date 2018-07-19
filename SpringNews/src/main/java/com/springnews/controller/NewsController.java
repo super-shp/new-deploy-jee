@@ -51,7 +51,7 @@ public class NewsController {
         return ResultUtil.successs(ResultEnum.OK, regionList);
     }
 
-    @PostMapping(path = "post-article")
+    @PostMapping(path = "/post-article")
     public UnifyResponse publishNews(HttpServletRequest req, HttpServletResponse res, @RequestBody String requestBody) throws Exception{
         String token = req.getHeader("Authorization");
         if (token == null){
