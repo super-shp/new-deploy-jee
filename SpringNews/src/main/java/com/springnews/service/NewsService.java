@@ -122,8 +122,6 @@ public class NewsService {
         TimeFormatTransform timeFormatTransform = new TimeFormatTransform();
         News news = newsRepository.findByPid(pid);
         NewsContent newsContent = newsContentService.findNewsByPid(pid);
-        System.out.println(news);
-        System.out.println(newsContent);
         if(news==null || newsContent==null){
             throw new NewsException(ResultEnum.QUERY_ERROR);
         }

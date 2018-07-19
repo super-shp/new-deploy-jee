@@ -18,26 +18,19 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         super(authManager);
     }
 
-    @Override
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
         String header = req.getHeader("Authorization");
 
         if (header == null || !header.startsWith("Bearer ")) {
-//            res.setStatus(403);
-//            return;
             chain.doFilter(req, res);
-        }
-
-        try {
-            UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }catch (Exception exception){
-            res.setStatus(403);
             return;
         }
 
+        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(req, res);
     }
 

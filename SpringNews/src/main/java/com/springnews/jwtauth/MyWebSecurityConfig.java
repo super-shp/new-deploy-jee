@@ -27,9 +27,11 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/auth/signup").permitAll()
-                .antMatchers(HttpMethod.POST, "/test-mongodb").permitAll()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/signup").permitAll()
+                .antMatchers(HttpMethod.POST, "/article/get-article").permitAll()
+                .antMatchers(HttpMethod.POST, "/article/get-column").permitAll()
+                .antMatchers(HttpMethod.POST, "/article/article-list").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTLoginFilter(authenticationManager()))
