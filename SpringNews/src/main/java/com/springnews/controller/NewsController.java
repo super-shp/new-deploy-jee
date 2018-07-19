@@ -15,6 +15,8 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/article")
 public class NewsController {
@@ -28,7 +30,8 @@ public class NewsController {
     private RegionService regionService;
 
     @PostMapping(path = "/article-list")
-    public UnifyResponse<NewsList> getNewsList(@RequestHeader("Authorization") String token, @RequestBody PostNewsListJson postNewsListJson) throws Exception{
+    public UnifyResponse<NewsList> getNewsList(HttpServletRequest req, @RequestBody PostNewsListJson postNewsListJson) throws Exception{
+        String token = req.getHeader("Authorization");
         String username = getUserName(token);
         NewsList newsList = newsService.getNewsList(postNewsListJson.getCurrentPage(), postNewsListJson.getPageSize(), postNewsListJson.getFilter(), username);
         return ResultUtil.successs(ResultEnum.OK, newsList);
@@ -67,7 +70,12 @@ public class NewsController {
     }
 
     @PostMapping(path = "/get-article")
-    public UnifyResponse getArticle(@RequestHeader("Authorization") String token, @RequestBody String requestBody) throws Exception{
+    public UnifyResponse getArticle(HttpServletRequest req, @RequestBody String requestBody) throws Exception{
+        String token = req.getHeader("Authorization");
+        System.out.println(token);
+        String username = getUserName(token);
+        System.out.println(username);
+
         JSONObject jsonObject = JSONObject.fromObject(requestBody);
         int pid = jsonObject.getInt("pid");
         return ResultUtil.successs(ResultEnum.OK, newsService.getNewsByPid(pid));
