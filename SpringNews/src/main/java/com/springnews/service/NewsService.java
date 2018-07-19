@@ -57,6 +57,11 @@ public class NewsService {
             }
         }
 
+        if(user == null){
+            user = new MyUser();
+            user.setRoot(1);
+        }
+
         PageRequest pageRequest = PageRequest.of(currentPage, pageSize);
         if(user.getRoot() == 0) {
             Page<News> pages = newsRepository.findAll(pageRequest);
@@ -179,7 +184,7 @@ public class NewsService {
     }
 
     @Transactional
-    public void deleteByPid(int pid){
+    public void deleteByPid(int pid) throws Exception{
         newsRepository.deleteByPid(pid);
     }
 

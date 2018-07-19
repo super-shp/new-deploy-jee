@@ -47,7 +47,7 @@ public class NewsController {
         return ResultUtil.successs(ResultEnum.OK, regionList);
     }
 
-    @PostMapping(path = "post-article")
+    @PostMapping(path = "/post-article")
     public UnifyResponse publishNews(@RequestHeader("Authorization") String token, @RequestBody String requestBody) throws Exception{
         JSONObject jsonObject = JSONObject.fromObject(requestBody);
         // 保存至mysql
