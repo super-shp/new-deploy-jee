@@ -60,25 +60,29 @@ public class NewsService {
         }
 
         PageRequest pageRequest = PageRequest.of(currentPage, pageSize);
+        Page<News> pages;
         if(user.getRoot() == 0) {
-            Page<News> pages = newsRepository.findAll(pageRequest);
-            Iterator<News> i = pages.iterator();
-            if (!i.hasNext()) {
-                throw new NewsException(ResultEnum.QUERY_ERROR);
+            if(filter==null || filter.equals("all")) {
+                pages = newsRepository.findAll(pageRequest);
             }
-            while (i.hasNext()) {
-                newsList.getArticleList().add(i.next());
+            else{
+                pages = newsRepository.findAllByTitleLike("%"+filter+"%", pageRequest);
             }
         }
         else{
-            Page<News> pages = newsRepository.findByStatus(1, pageRequest);
-            Iterator<News> i = pages.iterator();
-            if (!i.hasNext()) {
-                throw new NewsException(ResultEnum.QUERY_ERROR);
+            if(filter==null || filter.equals("all")) {
+                pages = newsRepository.findByStatus(1, pageRequest);
             }
-            while (i.hasNext()) {
-                newsList.getArticleList().add(i.next());
+            else {
+                pages = newsRepository.findAllByTitleLikeAndStatus("%"+filter+"%", 1, pageRequest);
             }
+        }
+        Iterator<News> i = pages.iterator();
+        if (!i.hasNext()) {
+            throw new NewsException(ResultEnum.QUERY_ERROR);
+        }
+        while (i.hasNext()) {
+            newsList.getArticleList().add(i.next());
         }
         newsList.getArticleList().sort(Comparator.naturalOrder());
         if(currentPage == 0){
@@ -87,14 +91,6 @@ public class NewsService {
                 newsList.getArticleList().add(0, topNews.get(0));
             }
         }
-
-//        for(int i = (currentPage-1)*pageSize; i < currentPage*pageSize; i++){
-//            if(i == allNews.size()){
-//                break;
-//            }
-//            News temp = allNews.get(i);
-//            newsList.getArticleList().add(temp);
-//        }
         return newsList;
     }
 
