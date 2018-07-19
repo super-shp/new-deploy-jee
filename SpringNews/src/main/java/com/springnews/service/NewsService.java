@@ -106,20 +106,30 @@ public class NewsService {
     }
 
     @Transactional
-    public int publishNews(String title, int cid, String username, String cover, String intro) throws Exception{
+    public int publishNews(String username, JSONObject jsonObject) throws Exception{
         MyUser user = userService.findByUsername(username);
         UserInfo userInfo = userInfoService.findByUid(user.getUid());
         if(user.getRoot() != 0){
             throw new UserException(ResultEnum.USER_AUTH_ERROR);
         }
+        String title = jsonObject.getString("title");
+        int cid = jsonObject.getInt("cid");
+        String cover = jsonObject.getString("cover");
+        String intro = jsonObject.getString("intro");
         News news = new News();
         news.setTitle(title);news.setCid(cid);news.setCover(cover);
         news.setCreated_time(new Date()); news.setUpdated_time(new Date());
         news.setUid(user.getUid());news.setAuthor(user.getAuthor());news.setFigure(userInfo.getFigure());
         news.setStatus(1);news.setVisited(0);news.setLiked(0);
         news.setIntro(intro);
-        News temp = newsRepository.save(news);
-        return news.getPid();
+        newsRepository.save(news);
+        int pid = news.getPid();
+        // 保存至mongodb
+        JSONObject contents = jsonObject.getJSONObject("content");
+        int words = jsonObject.getInt("words");
+        //DBObject bson = (DBObject) com.mongodb.util.JSON.parse(contents.toString());
+        newsContentService.publishNews(pid, contents.toString(), words);
+        return pid;
     }
 
     @Transactional

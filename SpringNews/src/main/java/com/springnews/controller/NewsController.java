@@ -61,18 +61,7 @@ public class NewsController {
         JSONObject jsonObject = JSONObject.fromObject(requestBody);
         String username = getUserName(token);
 
-        // 保存至mysql
-        String title = jsonObject.getString("title");
-        int cid = jsonObject.getInt("cid");
-        String cover = jsonObject.getString("cover");
-        String intro = jsonObject.getString("intro");
-        int pid = newsService.publishNews(title, cid, username, cover, intro);
-
-        // 保存至mongodb
-        JSONObject contents = jsonObject.getJSONObject("content");
-        int words = jsonObject.getInt("words");
-        //DBObject bson = (DBObject) com.mongodb.util.JSON.parse(contents.toString());
-        newsContentService.publishNews(pid, contents.toString(), words);
+        newsService.publishNews(username, jsonObject);
         return ResultUtil.successs(ResultEnum.OK);
     }
 
